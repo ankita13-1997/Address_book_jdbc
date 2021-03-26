@@ -25,33 +25,13 @@ import javax.swing.text.AbstractDocument.BranchElement;
 public class AddressBookDb {
 	
 	static Scanner sc= new Scanner(System.in);
+	static List<Book> bookStore= new ArrayList<>();
 	static boolean exit=false;
 	static Connection conneection;
 	static Statement statement;
-	static String jdbcUrl="jdbc:mysql://localhost:3306/addressbook?useSSL=false";
-	static String username="root";
-	static String password="Ankita@9713";
 	
-	 static List<Book> bookStore= new ArrayList<>();
-	public static Connection getConnection() {
-		
-		  try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			System.out.println("Driver loaded");
-			System.out.println("Connecting to database "+jdbcUrl);
-			conneection=DriverManager.getConnection(jdbcUrl,username,password);
-			System.out.println("don!!!");
-			
-			
-		    }
-		catch(ClassNotFoundException | SQLException  e)
-		{
-			//throw new IllegalStateException("cannot find driver");
-			e.printStackTrace();
-		}
-		
-		  return conneection;
-	}
+	
+	 
 	
 	
 	
@@ -63,7 +43,7 @@ public class AddressBookDb {
 		  try 
 		  {
 			    
-                conneection=getConnection();
+                conneection=ServiceConnection.getConnection();
 			    statement= conneection.createStatement();
 				ResultSet result = statement.executeQuery("select * from book");
 			    while(result.next())
@@ -105,7 +85,7 @@ public class AddressBookDb {
 			 
 			 try {
 			 System.out.println("inserting into the table ");
-			 conneection=DriverManager.getConnection(jdbcUrl,username,password);
+			 conneection=ServiceConnection.getConnection();
 			 statement1= conneection.prepareStatement("insert into book(first_name,last_name,type_name,state,city,zip_code,phone_no,email)"
 			 		+ "              value(?,?,?,?,?,?,?,?)");
 			 
@@ -179,7 +159,7 @@ public class AddressBookDb {
 		
 		 try 
 		 {
-			conneection=getConnection();
+			conneection=ServiceConnection.getConnection();
 		   System.out.println("Alteration  of Table");
 		  
 		  
@@ -222,7 +202,7 @@ public class AddressBookDb {
 			
 			try 
 			{
-				conneection=getConnection();
+				conneection=ServiceConnection.getConnection();
 				System.out.println("updating in table");
 				 String  sql =" UPDATE book set zip_code=? where first_name=?";
 				statement1=conneection.prepareStatement(sql);
